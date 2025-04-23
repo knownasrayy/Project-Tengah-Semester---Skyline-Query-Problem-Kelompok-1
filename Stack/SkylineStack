@@ -1,0 +1,105 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
+
+struct Item {
+    int id;
+    string name;
+    double price;
+    double review;
+};
+
+bool dominates(const Item& A, const Item& B) {
+    return (A.price <= B.price && A.review >= B.review) &&
+           (A.price < B.price || A.review > B.review);
+}
+
+vector<Item> skylineUsingStackLikeArray(const vector<Item>& items) {
+    vector<Item> skyline;
+
+    for (const auto& item : items) {
+        bool isDominated = false;
+        vector<Item> newSkyline;
+
+        for (const auto& skyItem : skyline) {
+            if (dominates(skyItem, item)) {
+                isDominated = true;
+                break;
+            }
+        }
+
+        if (!isDominated) {
+            // Hapus elemen yang didominasi oleh item ini
+            for (const auto& skyItem : skyline) {
+                if (!dominates(item, skyItem)) {
+                    newSkyline.push_back(skyItem);
+                }
+            }
+            newSkyline.push_back(item);
+            skyline = newSkyline;
+        }
+    }
+
+    return skyline;
+}
+
+void runSkyline() {
+    ifstream file("ind_1000_2_product.csv");
+    string line;
+    vector<Item> items;
+
+    getline(file, line);
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, name, priceStr, reviewStr;
+
+        getline(ss, idStr, ',');
+        getline(ss, name, ',');
+        getline(ss, priceStr, ',');
+        getline(ss, reviewStr, ',');
+
+        try {
+            Item item;
+            item.id = stoi(idStr);
+            item.name = name;
+            item.price = stod(priceStr);
+            item.review = stod(reviewStr);
+            items.push_back(item);
+        } catch (...) {
+            continue;
+        }
+    }
+
+    cout << "Jumlah item yang dibaca: " << items.size() << endl;
+
+    vector<Item> skyline = skylineUsingStackLikeArray(items);
+
+    cout << "Skyline result:\n";
+    int count = 0;
+    for (const auto& item : skyline) {
+        cout << "ID: " << item.id
+             << " | " << item.name
+             << " | harga: " << item.price
+             << " | rating: " << item.review << endl;
+        if (++count >= 9) break;
+    }
+}
+
+int main() {
+    auto start = high_resolution_clock::now();
+
+    runSkyline();
+
+    auto end = high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+
+    cout << "Waktu eksekusi: " << duration.count() << " detik" << endl;
+
+    return 0;
+}
