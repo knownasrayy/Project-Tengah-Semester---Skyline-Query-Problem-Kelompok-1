@@ -286,122 +286,116 @@ Membuat query skyline menggunakan stack dengan 1000 data
 Dengan kode:
 ```C++
 #include <iostream>
-#include <chrono>
-#include <stack>
-#include <vector>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
-// Struktur untuk merepresentasikan data produk dengan dua atribut: harga dan rating
-struct Point {
-    int price;
-    int rating;
+// Struktur data produk
+struct Item {
+    int id;
+    string name;
+    double price;
+    double review;
 };
 
-// Fungsi untuk menentukan apakah titik a mendominasi titik b
-bool dominates(Point a, Point b) {
-    return (a.price <= b.price && a.rating <= b.rating) &&
-           (a.price < b.price || a.rating < b.rating);
+// Fungsi dominasi: true jika A mendominasi B
+bool dominates(const Item& A, const Item& B) {
+    return (A.price <= B.price && A.review >= B.review) &&
+           (A.price < B.price || A.review > B.review);
 }
 
-// Fungsi untuk membaca data dari file CSV
-vector<Point> loadData(const string& filename) {
-    vector<Point> data;
-    ifstream file(filename);
-    string line;
+// Skyline query menggunakan pendekatan stack-style logic
+vector<Item> skylineUsingStackLikeArray(const vector<Item>& items) {
+    vector<Item> skyline;
 
-    getline(file, line); // Lewati baris header
-
-    // Baca setiap baris dalam file
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string idStr, labelStr, attr1Str, attr2Str;
-
-        // Ambil nilai dari setiap kolom: id, label, attr_1 (harga), attr_2 (rating)
-        getline(ss, idStr, ',');
-        getline(ss, labelStr, ',');
-        getline(ss, attr1Str, ',');
-        getline(ss, attr2Str, ',');
-
-        Point p;
-        try {
-            p.price = stoi(attr1Str);    // Konversi harga ke integer
-            p.rating = stoi(attr2Str);   // Konversi rating ke integer
-            data.push_back(p);           // Tambahkan ke dalam vektor data
-        } catch (...) {
-            continue; // Jika parsing gagal, skip baris ini
-        }
-    }
-    return data;
-}
-
-// Fungsi untuk menjalankan skyline query menggunakan struktur Stack
-vector<Point> skylineUsingStack(const vector<Point>& data) {
-    stack<Point> s; // Stack untuk menyimpan kandidat skyline
-
-    for (const auto& p : data) {
+    for (const auto& item : items) {
         bool isDominated = false;
-        stack<Point> temp;
+        vector<Item> newSkyline;
 
-        // Cek dominasi dengan elemen-elemen yang ada di stack
-        while (!s.empty()) {
-            Point top = s.top();
-            s.pop();
-
-            if (dominates(top, p)) {
-                isDominated = true; // Jika p didominasi, tandai
-            } else if (!dominates(p, top)) {
-                temp.push(top); // Simpan kembali elemen yang tidak didominasi
+        // Cek apakah item didominasi elemen lain di skyline
+        for (const auto& skyItem : skyline) {
+            if (dominates(skyItem, item)) {
+                isDominated = true;
+                break;
             }
         }
 
-        // Jika tidak didominasi oleh siapapun, tambahkan ke stack
+        // Jika tidak didominasi, tambahkan ke skyline
         if (!isDominated) {
-            temp.push(p);
-        }
-
-        // Rekonstruksi ulang stack dari stack sementara
-        while (!temp.empty()) {
-            s.push(temp.top());
-            temp.pop();
+            // Hapus elemen yang didominasi oleh item ini
+            for (const auto& skyItem : skyline) {
+                if (!dominates(item, skyItem)) {
+                    newSkyline.push_back(skyItem);
+                }
+            }
+            newSkyline.push_back(item); // Tambahkan item ke skyline
+            skyline = newSkyline;
         }
     }
 
-    // Ambil hasil dari stack ke dalam vektor untuk ditampilkan
-    vector<Point> result;
-    while (!s.empty()) {
-        result.push_back(s.top());
-        s.pop();
+    return skyline;
+}
+
+// Fungsi utama untuk membaca data dan menjalankan skyline query
+void runSkyline() {
+    ifstream file("ind_1000_2_product.csv");
+    string line;
+    vector<Item> items;
+
+    // Lewati header
+    getline(file, line);
+
+    // Baca file baris per baris
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, name, priceStr, reviewStr;
+
+        getline(ss, idStr, ',');
+        getline(ss, name, ',');
+        getline(ss, priceStr, ',');
+        getline(ss, reviewStr, ',');
+
+        try {
+            Item item;
+            item.id = stoi(idStr);
+            item.name = name;
+            item.price = stod(priceStr);
+            item.review = stod(reviewStr);
+            items.push_back(item);
+        } catch (...) {
+            continue; // Skip jika ada error parsing
+        }
     }
 
-    return result;
+    cout << "Jumlah item yang dibaca: " << items.size() << endl;
+
+    // Jalankan skyline query
+    vector<Item> skyline = skylineUsingStackLikeArray(items);
+
+    // Cetak hasil (maksimal 9 baris)
+    cout << "Skyline result:\n";
+    int count = 0;
+    for (const auto& item : skyline) {
+        cout << "ID: " << item.id
+             << " | " << item.name
+             << " | harga: " << item.price
+             << " | rating: " << item.review << endl;
+        if (++count >= 9) break;
+    }
 }
 
 int main() {
-    string filename = "ind_1000_2_product.csv";
+    auto start = high_resolution_clock::now();
 
-    // Load data dari file CSV
-    vector<Point> data = loadData(filename);
+    runSkyline();
 
-    // Mulai pencatatan waktu
-    auto start = chrono::high_resolution_clock::now();
-
-    // Jalankan skyline query
-    vector<Point> skyline = skylineUsingStack(data);
-
-    // Akhiri pencatatan waktu
-    auto end = chrono::high_resolution_clock::now();
+    auto end = high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
 
-    // Tampilkan hasil skyline
-    cout << "Produk Terbaik (menggunakan Stack):\n";
-    for (const auto& p : skyline) {
-        cout << "Harga: " << p.price << ", Rating: " << p.rating << '\n';
-    }
-
-    // Tampilkan waktu eksekusi
     cout << "Waktu eksekusi: " << duration.count() << " detik" << endl;
 
     return 0;
@@ -410,12 +404,21 @@ int main() {
 
 Dengan Hasil :
 ```
-Produk Terbaik (menggunakan Stack):
-Harga: 199, Rating: 110
-Waktu eksekusi: 0.000998 detik
+Jumlah item yang dibaca: 1000
+Skyline result:
+ID: 109 | product-109 | harga: 8 | rating: 231
+ID: 160 | product-160 | harga: 104 | rating: 283
+ID: 335 | product-335 | harga: 63 | rating: 263
+ID: 351 | product-351 | harga: 23 | rating: 240
+ID: 419 | product-419 | harga: 17 | rating: 236
+ID: 488 | product-488 | harga: 61 | rating: 257
+ID: 947 | product-947 | harga: 28 | rating: 244
+ID: 954 | product-954 | harga: 43 | rating: 245
+ID: 964 | product-964 | harga: 5 | rating: 195
+Waktu eksekusi: 0.010486 detik
 ```
 
-Dengan menggunakan stack dan 1000 data sebagai inputnya, hasil waktu yang dihasilkan adalah 0.000998 detik.
+Dengan menggunakan stack dan 1000 data sebagai inputnya, hasil waktu yang dihasilkan adalah 0.010486 detik.
 
 
 # Queue
