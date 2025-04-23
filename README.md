@@ -20,7 +20,7 @@
 
 | NAMA | DETIK |
 | ------------- | ------------- |
-|  Array | 1 |
+|  Array | 0.0265260 |
 | Stack  |  0.010486 |
 | Linked List | 0.0006452  |
 | Queue  | 0.000252  |
@@ -174,7 +174,7 @@ Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihas
 Membuat query skyline menggunakan linked liost dengan 1000 data
 
 Dengan kode:
-```
+```C++
 #include <iostream>
 #include <fstream>
 #include <sstream>
