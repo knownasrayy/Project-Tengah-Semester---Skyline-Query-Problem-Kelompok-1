@@ -32,7 +32,7 @@
 
 ***Dibuat oleh : Rizqi Akbar Sukirman Putra 5027241044***
 
-Membuat query skyline menggunakan linked liost dengan 1000 data
+Membuat query skyline menggunakan linked list dengan 1000 data
 
 Dengan kode:
 ```
