@@ -22,13 +22,13 @@
 | ------------- | ------------- |
 |  Array | ... |
 | Stack  |  0.010486 |
-| Linked List | 1  |
+| Linked List | 0.0006452  |
 | Queue  | 0.000252  |
 | Map  | 0.0174   |
 | Hash  | .... |
 
 
-#Linked List
+# Linked List
 
 ***Dibuat oleh : Rizqi Akbar Sukirman Putra 5027241044***
 
