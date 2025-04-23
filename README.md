@@ -9,9 +9,9 @@
 5. Naruna Vicranthyo Putra Gangga 5027241105
 6. Zahra Hafizhah 5027241121
 
-# Analisis Hasil 
 
-# Laporan Akhir
+
+# Laporan Akhir dan Analisis Hasil
 
 ## Hasil Performa 6 struktur data
 
