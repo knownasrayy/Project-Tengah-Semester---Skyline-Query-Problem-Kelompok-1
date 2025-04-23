@@ -26,28 +26,34 @@
 | Map  | 0.0174   |
 | Hash  |  0.000642646 |
 
-Array (0.0265 detik)
+**Array (0.0265 detik)**
+
 ➤ Lambat karena data harus dibandingkan satu-satu dengan elemen lain. Tanpa struktur yang mendukung pencarian cepat, skyline harus memeriksa semua kemungkinan dominasi.
 
 ➤ Waktu tinggi bisa disebabkan oleh banyaknya iterasi nested.
 
-Stack (0.0104 detik)
+**Stack (0.0104 detik)**
+
 ➤ Sedikit lebih cepat dari array. Menggunakan stack sebagai cara untuk menyimpan kandidat skyline, dan pop ketika ketemu data yang mendominasi.
 
-Linked List (0.0006452 detik)
+**Linked List (0.0006452 detik)**
+
 ➤ Cepat untuk mencari. Ini bisa terjadi karena dataset kecil atau traversal dan penyisipan dilakukan dengan cara efisien.
 
 ➤ Namun, biasanya linked list tidak optimal untuk operasi pencarian cepat, jadi hasil ini kemungkinan konteks-spesifik.
 
-Queue (0.000252 detik)
+**Queue (0.000252 detik)**
+
 ➤ Cepat, kemungkinan digunakan untuk proses streaming skyline atau layered traversal, di mana data diproses sekali lewat.
 
 ➤ Jika dipadukan dengan strategi early-pruning (potong kandidat lebih awal), ini bisa sangat efisien.
 
-Map (0.0174 detik)
+**Map (0.0174 detik)**
+
 ➤ Map (biasanya implemented sebagai TreeMap / BST) memungkinkan akses berdasarkan key, tapi tidak terlalu optimal untuk dominasi multidimensi tanpa struktur khusus.
 
-Hash (0.0006426 detik)
+**Hash (0.0006426 detik)**
+
 ➤ Sangat cepat. Hash digunakan untuk menyimpan dan mengecek eksistensi elemen dengan waktu konstan.
 
 ➤ Cocok untuk skyline jika digunakan untuk menyimpan kandidat yang valid dan melakukan pruning cepat.
