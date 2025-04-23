@@ -11,6 +11,8 @@
 
 # Linked List
 
+***Dibuat oleh : Rizqi Akbar Sukirman Putra 5027241044***
+
 Membuat query skyline menggunakan linked liost dengan 1000 data
 
 Dengan kode:
