@@ -180,11 +180,12 @@ Dengan kode:
 #include <sstream>
 #include <vector>
 #include <chrono>
+#include <iomanip>
 
 using namespace std;
 using namespace std::chrono;
 
-// Struktur data untuk menyimpan informasi produk
+
 struct Item {
     int id;
     string name;
@@ -192,13 +193,13 @@ struct Item {
     double review;
 };
 
-// Fungsi untuk mengecek dominasi antar produk
+
 bool dominates(const Item& A, const Item& B) {
     return (A.price <= B.price && A.review >= B.review) &&
            (A.price < B.price || A.review > B.review);
 }
 
-// Fungsi utama skyline query
+
 vector<Item> skylineQuery(const vector<Item>& items) {
     vector<Item> skyline;
     for (const auto& itemA : items) {
@@ -216,16 +217,16 @@ vector<Item> skylineQuery(const vector<Item>& items) {
     return skyline;
 }
 
-// Fungsi yang membungkus semua proses — seperti contoh dosen
+
 void exampleFunction() {
     ifstream file("E:\\KULIAH\\SEMESTER 2\\Struktur Data dan Pemrograman Berorientasi Objek (A)\\Project 1 - Skyline Query Problem\\ind_1000_2_product.csv");
     string line;
     vector<Item> items;
 
-    // Lewati header
+
     getline(file, line);
 
-    // Baca isi file baris per baris
+
     while (getline(file, line)) {
         stringstream ss(line);
         string idStr, name, priceStr, reviewStr;
@@ -245,10 +246,10 @@ void exampleFunction() {
 
     cout << "Jumlah item yang dibaca: " << items.size() << endl;
 
-    // Jalankan skyline query
+
     vector<Item> skyline = skylineQuery(items);
 
-    // Cetak hasil
+
     cout << "=== Produk Terbaik (Skyline) ===\n";
     for (const auto& item : skyline) {
         cout << "ID: " << item.id
@@ -259,17 +260,18 @@ void exampleFunction() {
 }
 
 int main() {
-    // Mulai pengukuran waktu
+
     auto start = high_resolution_clock::now();
 
-    // Jalankan fungsi utama
+
     exampleFunction();
 
-    // Selesai pengukuran waktu
+
     auto end = high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
 
-    // Cetak waktu eksekusi dalam detik
+
+    cout << fixed << setprecision(7); // Tampilkan 7 angka di belakang koma
     cout << "Waktu eksekusi: " << duration.count() << " detik" << endl;
 
     return 0;
@@ -280,20 +282,20 @@ int main() {
 Dengan Hasil :
 ```
 Jumlah item yang dibaca: 1000
-Skyline Query selesai dalam 1 ms
-Skyline result:
-Price: 8, Review: 231
-Price: 104, Review: 283
-Price: 63, Review: 263
-Price: 23, Review: 240
-Price: 17, Review: 236
-Price: 61, Review: 257
-Price: 28, Review: 244
-Price: 43, Review: 245
-Price: 5, Review: 195
+=== Produk Terbaik (Skyline) ===
+ID: 109 | product-109 | Harga: 8 | Rating: 231
+ID: 160 | product-160 | Harga: 104 | Rating: 283
+ID: 335 | product-335 | Harga: 63 | Rating: 263
+ID: 351 | product-351 | Harga: 23 | Rating: 240
+ID: 419 | product-419 | Harga: 17 | Rating: 236
+ID: 488 | product-488 | Harga: 61 | Rating: 257
+ID: 947 | product-947 | Harga: 28 | Rating: 244
+ID: 954 | product-954 | Harga: 43 | Rating: 245
+ID: 964 | product-964 | Harga: 5 | Rating: 195
+Waktu eksekusi: 0.0265260 detik
 ```
 
-Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah 1 detik.
+Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah  0.0265260 detik detik.
 
 
 # Stack
