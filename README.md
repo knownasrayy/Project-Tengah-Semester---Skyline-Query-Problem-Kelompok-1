@@ -10,8 +10,11 @@
 6. Zahra Hafizhah 5027241121
 
 # Analisis Hasil 
-1. struktur data yang paling efisisen dalam memproses skyline query ?
-2. mengapa?
+Berdasarkan hasil pengujian terhadap enam struktur data dalam memproses skyline query, diperoleh bahwa struktur data Queue merupakan yang paling efisien dengan waktu eksekusi tercepat yaitu 0.000252 detik. Efisiensi ini disebabkan oleh sifat dasar Queue yang menggunakan prinsip FIFO (First-In First-Out), memungkinkan data diproses secara berurutan tanpa membutuhkan banyak manipulasi struktur atau pencarian ulang.
+
+Struktur data seperti Linked List dan Hash juga menunjukkan performa yang baik, namun masih sedikit lebih lambat dibandingkan Queue. Di sisi lain, struktur data seperti Array dan Map cenderung memiliki waktu eksekusi yang lebih tinggi, kemungkinan akibat kompleksitas operasional yang lebih besar, seperti pencarian indeks atau pengurutan elemen.
+
+Oleh karena itu, untuk kebutuhan pengolahan skyline query yang mengutamakan efisiensi waktu, struktur data Queue merupakan pilihan paling optimal berdasarkan data performa yang telah diuji.
 
 
 # Laporan Akhir
