@@ -34,7 +34,7 @@ Sedikit lebih cepat dari array. Menggunakan stack sebagai cara untuk menyimpan k
 
 **Linked List (0.0027724 detik)**
 
-Cepat untuk mencari. Namun, biasanya linked list tidak optimal untuk operasi pencarian cepat, jadi hasil ini kemungkinan konteks-spesifik.
+Sedikit cepat untuk mencari. Namun, biasanya linked list tidak optimal untuk operasi pencarian cepat, jadi hasil ini kemungkinan konteks-spesifik.
 
 **Queue (0.000252 detik)**
 
