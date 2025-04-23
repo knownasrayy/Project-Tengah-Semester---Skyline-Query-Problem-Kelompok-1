@@ -276,3 +276,143 @@ Price: 5, Review: 195
 
 Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah 1 detik.
 
+
+# Stack
+
+***Dibuat oleh : Naruna Vicranthyo Putra Gangga 5027241105***
+
+Membuat query skyline menggunakan stack dengan 1000 data
+
+Dengan kode:
+```C++
+#include <iostream>
+#include <chrono>
+#include <stack>
+#include <vector>
+#include <fstream>
+#include <sstream>
+
+using namespace std;
+
+// Struktur untuk merepresentasikan data produk dengan dua atribut: harga dan rating
+struct Point {
+    int price;
+    int rating;
+};
+
+// Fungsi untuk menentukan apakah titik a mendominasi titik b
+bool dominates(Point a, Point b) {
+    return (a.price <= b.price && a.rating <= b.rating) &&
+           (a.price < b.price || a.rating < b.rating);
+}
+
+// Fungsi untuk membaca data dari file CSV
+vector<Point> loadData(const string& filename) {
+    vector<Point> data;
+    ifstream file(filename);
+    string line;
+
+    getline(file, line); // Lewati baris header
+
+    // Baca setiap baris dalam file
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, labelStr, attr1Str, attr2Str;
+
+        // Ambil nilai dari setiap kolom: id, label, attr_1 (harga), attr_2 (rating)
+        getline(ss, idStr, ',');
+        getline(ss, labelStr, ',');
+        getline(ss, attr1Str, ',');
+        getline(ss, attr2Str, ',');
+
+        Point p;
+        try {
+            p.price = stoi(attr1Str);    // Konversi harga ke integer
+            p.rating = stoi(attr2Str);   // Konversi rating ke integer
+            data.push_back(p);           // Tambahkan ke dalam vektor data
+        } catch (...) {
+            continue; // Jika parsing gagal, skip baris ini
+        }
+    }
+    return data;
+}
+
+// Fungsi untuk menjalankan skyline query menggunakan struktur Stack
+vector<Point> skylineUsingStack(const vector<Point>& data) {
+    stack<Point> s; // Stack untuk menyimpan kandidat skyline
+
+    for (const auto& p : data) {
+        bool isDominated = false;
+        stack<Point> temp;
+
+        // Cek dominasi dengan elemen-elemen yang ada di stack
+        while (!s.empty()) {
+            Point top = s.top();
+            s.pop();
+
+            if (dominates(top, p)) {
+                isDominated = true; // Jika p didominasi, tandai
+            } else if (!dominates(p, top)) {
+                temp.push(top); // Simpan kembali elemen yang tidak didominasi
+            }
+        }
+
+        // Jika tidak didominasi oleh siapapun, tambahkan ke stack
+        if (!isDominated) {
+            temp.push(p);
+        }
+
+        // Rekonstruksi ulang stack dari stack sementara
+        while (!temp.empty()) {
+            s.push(temp.top());
+            temp.pop();
+        }
+    }
+
+    // Ambil hasil dari stack ke dalam vektor untuk ditampilkan
+    vector<Point> result;
+    while (!s.empty()) {
+        result.push_back(s.top());
+        s.pop();
+    }
+
+    return result;
+}
+
+int main() {
+    string filename = "ind_1000_2_product.csv";
+
+    // Load data dari file CSV
+    vector<Point> data = loadData(filename);
+
+    // Mulai pencatatan waktu
+    auto start = chrono::high_resolution_clock::now();
+
+    // Jalankan skyline query
+    vector<Point> skyline = skylineUsingStack(data);
+
+    // Akhiri pencatatan waktu
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+
+    // Tampilkan hasil skyline
+    cout << "Produk Terbaik (menggunakan Stack):\n";
+    for (const auto& p : skyline) {
+        cout << "Harga: " << p.price << ", Rating: " << p.rating << '\n';
+    }
+
+    // Tampilkan waktu eksekusi
+    cout << "Waktu eksekusi: " << duration.count() << " detik" << endl;
+
+    return 0;
+}
+```
+
+Dengan Hasil :
+```
+Produk Terbaik (menggunakan Stack):
+Harga: 199, Rating: 110
+Waktu eksekusi: 0.000998 detik
+```
+
+Dengan menggunakan stack dan 1000 data sebagai inputnya, hasil waktu yang dihasilkan adalah 0.000998 detik.
