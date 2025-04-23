@@ -1,4 +1,5 @@
 # Project-Tengah-Semester---Skyline-Query-Problem-Kelompok-1
+
 **Anggota**
 
 1. Rayhan Agnan Kusuma 5027241102
@@ -8,7 +9,7 @@
 5. Putu Yudi Nandanjaya Wiraguna 5027241080
 6. Zahra Hafizhah 5027241121
 
-#Linked List
+# Linked List
 
 Membuat query skyline menggunakan linked liost dengan 1000 data
 
