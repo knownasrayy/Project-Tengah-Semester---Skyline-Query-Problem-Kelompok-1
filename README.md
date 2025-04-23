@@ -25,7 +25,7 @@
 | Linked List | 0.0006452  |
 | Queue  | 0.000252  |
 | Map  | 0.0174   |
-| Hash  | .... |
+| Hash  |  0.000642646 |
 
 
 # Linked List
