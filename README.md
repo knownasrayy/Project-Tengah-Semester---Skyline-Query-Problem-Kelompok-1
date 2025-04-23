@@ -2,11 +2,11 @@
 
 **Anggota**
 
-1. Rayhan Agnan Kusuma 5027241102
-2. Naruna Vicranthyo Putra Gangga 5027241105
-3. Rizqi Akbar Sukirman Putra 5027241044
-4. Fika Arka Nuriyah 5027241071
-5. Putu Yudi Nandanjaya Wiraguna 5027241080
+1. Rizqi Akbar Sukirman Putra 5027241044
+2. Fika Arka Nuriyah 5027241071
+3. Putu Yudi Nandanjaya Wiraguna 5027241080
+4. Rayhan Agnan Kusuma 5027241102
+5. Naruna Vicranthyo Putra Gangga 5027241105
 6. Zahra Hafizhah 5027241121
 
 # Linked List
