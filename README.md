@@ -1,6 +1,7 @@
 # Project-Tengah-Semester---Skyline-Query-Problem-Kelompok-1
 
 **Linked List**
+
 Membuat query skyline menggunakan linked liost dengan 1000 data
 
 Dengan kode:
