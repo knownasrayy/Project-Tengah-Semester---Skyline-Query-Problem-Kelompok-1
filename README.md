@@ -20,7 +20,7 @@
 
 | NAMA | DETIK |
 | ------------- | ------------- |
-|  Array | ... |
+|  Array | 1 |
 | Stack  |  0.010486 |
 | Linked List | 0.0006452  |
 | Queue  | 0.000252  |
@@ -167,7 +167,7 @@ Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihas
 
 
 
-#Array
+# Array
 
 ***Dibuat oleh : Rayhan Agnan Kusuma 5027241044***
 
@@ -440,7 +440,7 @@ Waktu eksekusi: 0.010486 detik
 Dengan menggunakan stack dan 1000 data sebagai inputnya, hasil waktu yang dihasilkan adalah 0.010486 detik.
 
 
-#Queue
+# Queue
 
 ***Dibuat oleh : Fika Arka Nuriyah 5027241071***
 
@@ -585,7 +585,7 @@ output :
 
 Dengan menggunakan stack dan 1000 data sebagai inputnya, hasil waktu yang dihasilkan adalah  0.000252 detik.
 
-#Map
+# Map
 
 ***Dibuat oleh : Zahra Hafizhah 5027241121***
 
