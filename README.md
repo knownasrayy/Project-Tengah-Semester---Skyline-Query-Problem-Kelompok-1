@@ -204,10 +204,10 @@ Dengan kode:
 #include <vector>
 #include <chrono>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 using namespace std::chrono;
-
 
 struct Item {
     int id;
@@ -216,63 +216,70 @@ struct Item {
     double review;
 };
 
-
 bool dominates(const Item& A, const Item& B) {
     return (A.price <= B.price && A.review >= B.review) &&
            (A.price < B.price || A.review > B.review);
 }
 
+vector<Item> optimizedSkylineQuery(vector<Item>& items) {
+    sort(items.begin(), items.end(), [](const Item& a, const Item& b) {
+        return (a.price < b.price) || (a.price == b.price && a.review > b.review);
+    });
 
-vector<Item> skylineQuery(const vector<Item>& items) {
     vector<Item> skyline;
-    for (const auto& itemA : items) {
-        bool isDominated = false;
-        for (const auto& itemB : items) {
-            if (&itemA != &itemB && dominates(itemB, itemA)) {
-                isDominated = true;
+    for (const auto& item : items) {
+        bool dominated = false;
+        for (const auto& sk : skyline) {
+            if (dominates(sk, item)) {
+                dominated = true;
                 break;
             }
         }
-        if (!isDominated) {
-            skyline.push_back(itemA);
+        if (!dominated) {
+            skyline.push_back(item);
         }
     }
+
     return skyline;
 }
 
-
-void exampleFunction() {
-    ifstream file("E:\\KULIAH\\SEMESTER 2\\Struktur Data dan Pemrograman Berorientasi Objek (A)\\Project 1 - Skyline Query Problem\\ind_1000_2_product.csv");
-    string line;
+vector<Item> readData(const string& filePath) {
+    ifstream file(filePath);
     vector<Item> items;
+    string line;
 
+    if (!file.is_open()) {
+        cerr << "Gagal membuka file: " << filePath << endl;
+        return items;
+    }
 
-    getline(file, line);
-
+    getline(file, line); // Skip header
 
     while (getline(file, line)) {
         stringstream ss(line);
         string idStr, name, priceStr, reviewStr;
 
-        getline(ss, idStr, ',');
-        getline(ss, name, ',');
-        getline(ss, priceStr, ',');
-        getline(ss, reviewStr, ',');
+        if (!getline(ss, idStr, ',')) continue;
+        if (!getline(ss, name, ',')) continue;
+        if (!getline(ss, priceStr, ',')) continue;
+        if (!getline(ss, reviewStr, ',')) continue;
 
-        Item item;
-        item.id = stoi(idStr);
-        item.name = name;
-        item.price = stod(priceStr);
-        item.review = stod(reviewStr);
-        items.push_back(item);
+        try {
+            Item item;
+            item.id = stoi(idStr);
+            item.name = name;
+            item.price = stod(priceStr);
+            item.review = stod(reviewStr);
+            items.push_back(item);
+        } catch (...) {
+            cerr << "Baris tidak valid: " << line << endl;
+        }
     }
 
-    cout << "Jumlah item yang dibaca: " << items.size() << endl;
+    return items;
+}
 
-
-    vector<Item> skyline = skylineQuery(items);
-
-
+void printSkyline(const vector<Item>& skyline) {
     cout << "=== Produk Terbaik (Skyline) ===\n";
     for (const auto& item : skyline) {
         cout << "ID: " << item.id
@@ -280,25 +287,29 @@ void exampleFunction() {
              << " | Harga: " << item.price
              << " | Rating: " << item.review << endl;
     }
+    cout << "Jumlah produk skyline: " << skyline.size() << "\n\n";
 }
 
 int main() {
+    string filePath = "E:\\KULIAH\\SEMESTER 2\\Struktur Data dan Pemrograman Berorientasi Objek (A)\\Project 1 - Skyline Query Problem\\ind_1000_2_product.csv";
 
     auto start = high_resolution_clock::now();
 
+    vector<Item> items = readData(filePath);
+    cout << "Jumlah item yang dibaca: " << items.size() << endl;
 
-    exampleFunction();
-
+    vector<Item> skyline = optimizedSkylineQuery(items);
+    printSkyline(skyline);
 
     auto end = high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
 
-
-    cout << fixed << setprecision(7); // Tampilkan 7 angka di belakang koma
-    cout << "Waktu eksekusi: " << duration.count() << " detik" << endl;
+    cout << fixed << setprecision(7);
+    cout << "Waktu eksekusi: " << duration.count() << " detik\n";
 
     return 0;
 }
+
 
 ```
 
@@ -306,19 +317,21 @@ Dengan Hasil :
 ```
 Jumlah item yang dibaca: 1000
 === Produk Terbaik (Skyline) ===
+ID: 964 | product-964 | Harga: 5 | Rating: 195
 ID: 109 | product-109 | Harga: 8 | Rating: 231
-ID: 160 | product-160 | Harga: 104 | Rating: 283
-ID: 335 | product-335 | Harga: 63 | Rating: 263
-ID: 351 | product-351 | Harga: 23 | Rating: 240
 ID: 419 | product-419 | Harga: 17 | Rating: 236
-ID: 488 | product-488 | Harga: 61 | Rating: 257
+ID: 351 | product-351 | Harga: 23 | Rating: 240
 ID: 947 | product-947 | Harga: 28 | Rating: 244
 ID: 954 | product-954 | Harga: 43 | Rating: 245
-ID: 964 | product-964 | Harga: 5 | Rating: 195
-Waktu eksekusi: 0.0265260 detik
+ID: 488 | product-488 | Harga: 61 | Rating: 257
+ID: 335 | product-335 | Harga: 63 | Rating: 263
+ID: 160 | product-160 | Harga: 104 | Rating: 283
+Jumlah produk skyline: 9
+
+Waktu eksekusi: 0.0128110 detik
 ```
 
-Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah  0.0265260 detik detik.
+Dengan menggunakan Array dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah  0.0128110 detik detik.
 
 
 # Stack
