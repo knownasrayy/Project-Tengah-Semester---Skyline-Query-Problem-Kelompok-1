@@ -19,7 +19,7 @@
 | ------------- | ------------- |
 |  Array | 0.0265260 |
 | Stack  |  0.010486 |
-| Linked List | 0.0006452  |
+| Linked List | 0.0027724  |
 | Queue  | 0.000252  |
 | Map  | 0.0174   |
 | Hash  |  0.000642646 |
@@ -32,9 +32,9 @@ Lambat karena data harus dibandingkan satu-satu dengan elemen lain. Tanpa strukt
 
 Sedikit lebih cepat dari array. Menggunakan stack sebagai cara untuk menyimpan kandidat skyline, dan pop ketika ketemu data yang mendominasi.
 
-**Linked List (0.0006452 detik)**
+**Linked List (0.0027724 detik)**
 
-Cepat untuk mencari. Ini bisa terjadi karena dataset kecil atau traversal dan penyisipan dilakukan dengan cara efisien. Namun, biasanya linked list tidak optimal untuk operasi pencarian cepat, jadi hasil ini kemungkinan konteks-spesifik.
+Cepat untuk mencari. Namun, biasanya linked list tidak optimal untuk operasi pencarian cepat, jadi hasil ini kemungkinan konteks-spesifik.
 
 **Queue (0.000252 detik)**
 
@@ -69,8 +69,8 @@ using namespace std;
 struct Product {
     int id;
     string label;
-    int harga; 
-    int rating; 
+    int harga;
+    int rating;
     Product* next;
 };
 
@@ -78,7 +78,7 @@ class LinkedList {
 private:
     Product* head;
 
-    bool dominates(Product* a, Product* b) {
+    bool dominates(Product* a, Product* b) const {
         bool betterOrEqualHarga = a->harga <= b->harga;
         bool betterOrEqualRating = a->rating >= b->rating;
         bool strictlyBetter = (a->harga < b->harga || a->rating > b->rating);
@@ -88,8 +88,16 @@ private:
 public:
     LinkedList() : head(nullptr) {}
 
-    void insert(int id, string label, int attr1, int attr2) {
-        Product* newProduct = new Product{id, label, attr1, attr2, nullptr};
+    ~LinkedList() {
+        while (head) {
+            Product* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+    void insert(int id, const string& label, int harga, int rating) {
+        Product* newProduct = new Product{id, label, harga, rating, nullptr};
         if (!head) {
             head = newProduct;
         } else {
@@ -99,7 +107,7 @@ public:
         }
     }
 
-    void skyline() {
+    void skyline() const {
         Product* outer = head;
         while (outer) {
             Product* inner = head;
@@ -125,50 +133,63 @@ public:
     }
 };
 
-void exampleFunction()
-{
-  for (int i = 0; i < 1000000; ++i)
-  {
-    // Operasi sederhana
-    int x = i * i;
-  }
-}
-
 void loadCSV(const string& filename, LinkedList& list) {
     ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Gagal membuka file: " << filename << endl;
+        return;
+    }
+
     string line;
     getline(file, line); // skip header
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string idStr, label, attr1Str, attr2Str;
-        getline(ss, idStr, ',');
-        getline(ss, label, ',');
-        getline(ss, attr1Str, ',');
-        getline(ss, attr2Str, ',');
+        string idStr, label, hargaStr, ratingStr;
 
-        int id = stoi(idStr);
-        int attr1 = stoi(attr1Str);
-        int attr2 = stoi(attr2Str);
+        if (!getline(ss, idStr, ',') ||
+            !getline(ss, label, ',') ||
+            !getline(ss, hargaStr, ',') ||
+            !getline(ss, ratingStr, ',')) {
+            cerr << "Format baris salah: " << line << endl;
+            continue;
+        }
 
-        list.insert(id, label, attr1, attr2);
+        try {
+            int id = stoi(idStr);
+            int harga = stoi(hargaStr);
+            int rating = stoi(ratingStr);
+            list.insert(id, label, harga, rating);
+        } catch (const exception& e) {
+            cerr << "Gagal parsing baris: " << line << " | Error: " << e.what() << endl;
+        }
     }
 }
 
 int main() {
     LinkedList list;
+
+    // Waktu mulai untuk load data
+    auto startLoad = chrono::high_resolution_clock::now();
     loadCSV("ind_1000_2_product.csv", list);
+    auto endLoad = chrono::high_resolution_clock::now();
+
+    // Waktu mulai untuk skyline
+    auto startSkyline = chrono::high_resolution_clock::now();
     cout << "=== Produk Terbaik (Skyline) ===" << endl;
     list.skyline();
+    auto endSkyline = chrono::high_resolution_clock::now();
 
-    auto start = std::chrono::high_resolution_clock::now();
-    exampleFunction();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    std::cout << "Waktu eksekusi: " << duration.count() << " detik" << std::endl;
+    // Hitung dan tampilkan waktu
+    chrono::duration<double> loadDuration = endLoad - startLoad;
+    chrono::duration<double> skylineDuration = endSkyline - startSkyline;
+
+    cout << "\nWaktu load data     : " << loadDuration.count() << " detik" << endl;
+    cout << "Waktu proses skyline: " << skylineDuration.count() << " detik" << endl;
 
     return 0;
 }
+
 ```
 
 Dengan Hasil :
@@ -183,10 +204,12 @@ ID: 488 | product-488 | Harga: 61 | Rating: 257
 ID: 947 | product-947 | Harga: 28 | Rating: 244
 ID: 954 | product-954 | Harga: 43 | Rating: 245
 ID: 964 | product-964 | Harga: 5 | Rating: 195
-Waktu eksekusi: 0.0006452 detik
+
+Waktu load data     : 0.0120573 detik
+Waktu proses skyline: 0.0027724 detik
 ```
 
-Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah 0.0006452 detik.
+Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah 0.0027724 detik.
 
 
 
