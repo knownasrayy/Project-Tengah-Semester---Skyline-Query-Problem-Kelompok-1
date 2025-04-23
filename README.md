@@ -48,7 +48,7 @@ Map (biasanya implemented sebagai TreeMap / BST) memungkinkan akses berdasarkan 
 
 Sangat cepat. Hash digunakan untuk menyimpan dan mengecek eksistensi elemen dengan waktu konstan. Cocok untuk skyline jika digunakan untuk menyimpan kandidat yang valid dan melakukan pruning cepat.
 
-***Namun, hasil di atas kemungkinan memiliki sangkut paut dedngan spek atau performa komputer yang digunakan.***
+***Namun, hasil di atas kemungkinan memiliki sangkut paut dengan spek atau performa komputer yang digunakan.***
 
 
 # Linked List
