@@ -426,7 +426,7 @@ Membuat query skyline menggunakan queue dengan 1000 data
 
 Dengan kode:
 
-```
+```C++
 #include <iostream>
 #include <fstream>
 #include <string>
