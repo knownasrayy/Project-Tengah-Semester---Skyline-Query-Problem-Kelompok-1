@@ -9,7 +9,26 @@
 5. Naruna Vicranthyo Putra Gangga 5027241105
 6. Zahra Hafizhah 5027241121
 
-# Linked List
+# Analisis Hasil 
+1. struktur data yang paling efisisen dalam memproses skyline query ?
+2. mengapa?
+
+
+# Laporan Akhir
+
+## Hasil Performa 6 struktur data
+
+| NAMA | DETIK |
+| ------------- | ------------- |
+|  Array | ... |
+| Stack  |  0.010486 |
+| Linked List | 1  |
+| Queue  | 0.000252  |
+| Map  | 0.0174   |
+| Hash  | .... |
+
+##Analisis hasil performa
+### Linked List
 
 ***Dibuat oleh : Rizqi Akbar Sukirman Putra 5027241044***
 
@@ -148,7 +167,7 @@ Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihas
 
 
 
-# Array
+###Array
 
 ***Dibuat oleh : Rayhan Agnan Kusuma 5027241044***
 
@@ -277,7 +296,7 @@ Price: 5, Review: 195
 Dengan menggunakan linked list dan menggunakan 1000 data, hasil waktu yang dihasilkan adalah 1 detik.
 
 
-# Stack
+### Stack
 
 ***Dibuat oleh : Naruna Vicranthyo Putra Gangga 5027241105***
 
@@ -421,7 +440,7 @@ Waktu eksekusi: 0.010486 detik
 Dengan menggunakan stack dan 1000 data sebagai inputnya, hasil waktu yang dihasilkan adalah 0.010486 detik.
 
 
-# Queue
+### Queue
 
 ***Dibuat oleh : Fika Arka Nuriyah 5027241071***
 
@@ -566,7 +585,7 @@ output :
 
 Dengan menggunakan stack dan 1000 data sebagai inputnya, hasil waktu yang dihasilkan adalah  0.000252 detik.
 
-#Map
+###Map
 
 ***Dibuat oleh : Zahra Hafizhah 5027241121***
 
